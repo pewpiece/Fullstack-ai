@@ -59,6 +59,23 @@ function extractDetail(payload: unknown) {
     if (typeof detail === 'string') {
       return detail;
     }
+    if (Array.isArray(detail)) {
+      const messages = detail
+        .map((entry) => {
+          if (entry && typeof entry === 'object' && 'msg' in entry) {
+            const message = (entry as { msg?: unknown }).msg;
+            if (typeof message === 'string') {
+              return message;
+            }
+          }
+          return null;
+        })
+        .filter((message): message is string => Boolean(message));
+
+      if (messages.length > 0) {
+        return messages.join(' ');
+      }
+    }
   }
 
   return 'Request failed';

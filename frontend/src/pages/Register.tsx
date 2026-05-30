@@ -4,6 +4,28 @@ import { Mail, Lock, User, UserPlus } from 'lucide-react';
 import { register as registerRequest } from '../api';
 import { ErrorBanner } from '../components/ui/ErrorBanner';
 
+const PASSWORD_MIN_LENGTH = 12;
+
+function validatePassword(password: string) {
+  if (password.length < PASSWORD_MIN_LENGTH) {
+    return `Password must be at least ${PASSWORD_MIN_LENGTH} characters long.`;
+  }
+  if (!/[A-Z]/.test(password)) {
+    return 'Password must contain at least one uppercase letter.';
+  }
+  if (!/[a-z]/.test(password)) {
+    return 'Password must contain at least one lowercase letter.';
+  }
+  if (!/\d/.test(password)) {
+    return 'Password must contain at least one digit.';
+  }
+  if (!/[^A-Za-z0-9]/.test(password)) {
+    return 'Password must contain at least one special character.';
+  }
+
+  return '';
+}
+
 export function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,6 +40,12 @@ export function Register() {
 
     if (!email.trim() || !password) {
       setError('Email and password are required.');
+      return;
+    }
+
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      setError(passwordError);
       return;
     }
 
@@ -114,10 +142,13 @@ export function Register() {
                   className="block w-full pl-10 pr-3 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                   placeholder="Create a password"
                   required
-                  minLength={6}
+                  minLength={PASSWORD_MIN_LENGTH}
                   autoComplete="new-password"
                 />
               </div>
+              <p className="mt-2 text-xs text-slate-500">
+                Use at least {PASSWORD_MIN_LENGTH} characters with uppercase, lowercase, number, and special character.
+              </p>
             </div>
 
             <button
