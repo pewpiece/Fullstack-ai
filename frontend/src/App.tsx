@@ -12,7 +12,11 @@ import { AllItems } from './pages/AllItems';
 import { useAuth } from './contexts/useAuth';
 
 function PublicRoute({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isAuthReady } = useAuth();
+
+  if (!isAuthReady) {
+    return null;
+  }
 
   if (isAuthenticated) {
     return <Navigate to="/" replace />;
