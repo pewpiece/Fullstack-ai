@@ -16,9 +16,9 @@ def _unique_email(prefix: str = "sec") -> str:
 
 
 class TestCORS:
-    """Fix 3: CORS must not allow wildcard origins."""
+    """CORS should allow requests from any origin."""
 
-    def test_cors_does_not_allow_wildcard(self, client):
+    def test_cors_allows_wildcard(self, client):
         resp = client.options(
             "/api/auth/login",
             headers={
@@ -27,13 +27,10 @@ class TestCORS:
             },
         )
         acao = resp.headers.get("access-control-allow-origin")
-        # Must NOT be "*"
-        assert acao != "*"
-        # An unknown origin should be blocked (header absent or not matching)
-        assert acao is None or acao != "https://evil.example.com"
+        assert acao == "*"
 
-    def test_cors_allows_configured_origin(self, client):
-        """An origin from ALLOWED_ORIGINS should be reflected."""
+    def test_cors_allows_any_origin(self, client):
+        """Any origin should be reflected when CORS is fully open."""
         resp = client.options(
             "/api/auth/login",
             headers={
@@ -42,7 +39,7 @@ class TestCORS:
             },
         )
         acao = resp.headers.get("access-control-allow-origin")
-        assert acao == "http://localhost"
+        assert acao == "*"
 
 
 class TestSecurityHeaders:

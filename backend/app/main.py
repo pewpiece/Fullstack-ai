@@ -79,15 +79,15 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 
 app.add_middleware(SecurityHeadersMiddleware)
 
-# ── CORS (Fix 3 – High) ──────────────────────────────────────────────────────
-# Replaces allow_origins=["*"] with an explicit whitelist from env.
+# ── CORS ─────────────────────────────────────────────────────────────────────
+# Allow all origins so the frontend can call the API from any deployed host.
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allow_headers=["Authorization", "Content-Type"],
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
