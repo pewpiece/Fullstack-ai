@@ -47,33 +47,9 @@ class TestRegister:
     def test_register_weak_password_too_short(self, client):
         resp = client.post(
             "/api/auth/register",
-            json={"email": _unique_email(), "password": "Sh0rt!"},
+            json={"email": _unique_email(), "password": "short"},
         )
         assert resp.status_code == 422
-
-    def test_register_weak_password_no_uppercase(self, client):
-        resp = client.post(
-            "/api/auth/register",
-            json={"email": _unique_email(), "password": "nouppercase1!xx"},
-        )
-        assert resp.status_code == 422
-        assert "uppercase" in resp.text.lower()
-
-    def test_register_weak_password_no_digit(self, client):
-        resp = client.post(
-            "/api/auth/register",
-            json={"email": _unique_email(), "password": "NoDigitHere!!xx"},
-        )
-        assert resp.status_code == 422
-        assert "digit" in resp.text.lower()
-
-    def test_register_weak_password_no_special(self, client):
-        resp = client.post(
-            "/api/auth/register",
-            json={"email": _unique_email(), "password": "NoSpecial1chars"},
-        )
-        assert resp.status_code == 422
-        assert "special" in resp.text.lower()
 
 
 # ── Login ─────────────────────────────────────────────────────────────────────

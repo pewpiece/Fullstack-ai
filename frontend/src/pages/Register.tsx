@@ -4,27 +4,7 @@ import { Mail, Lock, User, UserPlus } from 'lucide-react';
 import { register as registerRequest } from '../api';
 import { ErrorBanner } from '../components/ui/ErrorBanner';
 
-const PASSWORD_MIN_LENGTH = 12;
-
-function validatePassword(password: string) {
-  if (password.length < PASSWORD_MIN_LENGTH) {
-    return `Password must be at least ${PASSWORD_MIN_LENGTH} characters long.`;
-  }
-  if (!/[A-Z]/.test(password)) {
-    return 'Password must contain at least one uppercase letter.';
-  }
-  if (!/[a-z]/.test(password)) {
-    return 'Password must contain at least one lowercase letter.';
-  }
-  if (!/\d/.test(password)) {
-    return 'Password must contain at least one digit.';
-  }
-  if (!/[^A-Za-z0-9]/.test(password)) {
-    return 'Password must contain at least one special character.';
-  }
-
-  return '';
-}
+const PASSWORD_MIN_LENGTH = 6;
 
 export function Register() {
   const [email, setEmail] = useState('');
@@ -43,9 +23,8 @@ export function Register() {
       return;
     }
 
-    const passwordError = validatePassword(password);
-    if (passwordError) {
-      setError(passwordError);
+    if (password.length < PASSWORD_MIN_LENGTH) {
+      setError(`Password must be at least ${PASSWORD_MIN_LENGTH} characters long.`);
       return;
     }
 
@@ -147,7 +126,7 @@ export function Register() {
                 />
               </div>
               <p className="mt-2 text-xs text-slate-500">
-                Use at least {PASSWORD_MIN_LENGTH} characters with uppercase, lowercase, number, and special character.
+                Use at least {PASSWORD_MIN_LENGTH} characters.
               </p>
             </div>
 

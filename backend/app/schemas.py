@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import re
 from datetime import datetime
 from typing import Optional
 
@@ -16,21 +15,8 @@ class Token(BaseModel):
 
 class UserRegister(BaseModel):
     email: str
-    password: str = Field(..., min_length=12, max_length=128)
+    password: str = Field(..., min_length=6, max_length=128)
     name: Optional[str] = None
-
-    @field_validator("password")
-    @classmethod
-    def strong_password(cls, value: str) -> str:
-        if not re.search(r"[A-Z]", value):
-            raise ValueError("Password must contain at least one uppercase letter.")
-        if not re.search(r"[a-z]", value):
-            raise ValueError("Password must contain at least one lowercase letter.")
-        if not re.search(r"\d", value):
-            raise ValueError("Password must contain at least one digit.")
-        if not re.search(r"[^A-Za-z0-9]", value):
-            raise ValueError("Password must contain at least one special character.")
-        return value
 
 
 class UserLogin(BaseModel):
